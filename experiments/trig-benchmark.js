@@ -1,8 +1,7 @@
 $(function() {
 
-	function iterate()
+	function iterate(iterations)
 	{
-		var iterations = 1000000;
 		var slopes = [];
 		var init_start = new Date().getTime();
 		for(var i = 0; i<iterations; i++) {
@@ -101,9 +100,11 @@ $(function() {
 		return result;
 	}
 
+	var iterations = 1000000;
+
 	var results = [];
 	for (var j = 0; j < 10; j++) {
-		var result = iterate();
+		var result = iterate(iterations);
 		results.push(result);
 	}
 
@@ -112,6 +113,7 @@ $(function() {
 		arit_ms: 0,
 		trig_ms: 0,
 	};
+	
 	for (var j = 0; j < results.length; j++) {
 		total.init_ms += results[j].init_ms;
 		total.arit_ms += results[j].arit_ms;
@@ -124,6 +126,11 @@ $(function() {
 		trig: total.trig_ms / results.length,
 	};
 	
-	$("#stats").text("Init: " + average.init.toFixed(0) + " ms; arithmetic: " + average.arit.toFixed(0) + " ms; trigonometric: " + average.trig.toFixed(0) + " ms");
+	var fps = {
+		arit: 1000 / average.arit * iterations * 8,
+		trig: 1000 / average.trig * iterations * 8,
+	};
+	
+	$("#stats").text(parseInt(iterations).toLocaleString() + " iterations: init: " + average.init.toFixed(0) + " ms; arithmetic: " + average.arit.toFixed(0) + " ms ("+ parseInt(fps.arit.toFixed(0)).toLocaleString() +" vps); trigonometric: " + average.trig.toFixed(0) + " ms ("+ parseInt(fps.trig.toFixed(0)).toLocaleString() +" vps)");
 	$("#browser").text(navigator.userAgent);
 });
