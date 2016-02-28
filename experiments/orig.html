@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<title>Slope field example</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" />
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.min.js"></script>
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+	<!-- <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'> -->
+	<link href='https://fonts.googleapis.com/css?family=PT+Serif:400|Lobster+Two:400' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+		body {
+			font-family: 'PT Serif', serif;
+		}
+		h1 {
+			font-family: 'Lobster Two', serif;
+			margin-top: 23pt;
+			margin-bottom: 10pt;
+			text-align: center;
+			font-size: 3.052em;
+			color: #f78769;
+		}
+	</style>
+</head>
+
+<body>
+<div class="container">
+		<h1>Slope field example</h1>
+		<p class="lead">A simple slope field example, inherited from the previous Khan Academy experiment.</p>
+	<canvas id="canvas" style="margin: auto; display: block"></canvas>
+	<p>
+	$$ \frac{dy}{dx} = cos\left(\frac{x}{50}\right) \cdot sin\left(\frac{xy}{94}\right) $$
+	$$ x = (5 \ldots 25); y = (5 \ldots 34) $$
+	</p>
+</div>
+<script type="text/javascript" src="orig.js"></script>
+</body>
+</html>
