@@ -1,0 +1,97 @@
+$(function() {
+
+function iterate()
+{
+var iterations = 1000000;
+var slopes = [];
+for(var i = 0; i<iterations; i++) {
+	slopes.push(Math.random() * Number.MAX_VALUE);
+}
+
+var slopeFieldSize = 5;
+var x = 10;
+var y = 10;
+
+var p = new Processing();
+
+var arit_start = new Date().getTime();
+for (var i = 0; i<iterations; i++) {
+	var slope = slopes[i];
+	var endX = x + slopeFieldSize;
+	var endY = y + slopeFieldSize * slope;
+	var distance = p.dist(x, y, endX, endY);
+	var factor = slopeFieldSize/distance/2;
+	
+	var slope2 = -1 / slope;
+	var endX2 = x + slopeFieldSize;
+	var endY2 = y + slopeFieldSize * slope2;
+	var distance2 = p.dist(x, y, endX2, endY2);
+	var factor2 = slopeFieldSize/distance2/8;
+	
+	var x11 = x - slopeFieldSize * factor2;
+	var y11 = y - slopeFieldSize * factor2 * slope;
+	var x12 = x - slopeFieldSize * factor;
+	var y12 = y - slopeFieldSize * factor * slope2;
+	var x13 = x + slopeFieldSize * factor2;
+	var y13 = y + slopeFieldSize * factor2 * slope;
+	var x14 = x + slopeFieldSize * factor;
+	var y14 = y + slopeFieldSize * factor * slope2;
+
+	var x21 = x - slopeFieldSize * factor;
+	var y21 = y - slopeFieldSize * factor * slope;
+	var x22 = x - slopeFieldSize * factor2;
+	var y22 = y - slopeFieldSize * factor2 * slope2;
+	var x23 = x + slopeFieldSize * factor;
+	var y23 = y + slopeFieldSize * factor * slope;
+	var x24 = x + slopeFieldSize * factor2;
+	var y24 = y + slopeFieldSize * factor2 * slope2;
+}
+var arit_end = new Date().getTime();
+var arit_ms = arit_end - arit_start;
+
+/*
+The arithmetic operations above are real, they were actually used to plot slope fields.
+
+The trigonometric operations below are 100% fiction, I made them up and never used them
+for any practical purpose. But I expect that would be the kind of computational effort
+required to replicate the results above.
+*/
+
+var trig_start = new Date().getTime();
+for (var i = 0; i<iterations; i++) {
+	var slope = slopes[i];
+	
+	var ang = Math.atan(slope);
+	var perpAng = ang + Math.PI;
+	
+	var smallFieldSize = slopeFieldSize / 8;
+	
+	var x11 = x - Math.cos(ang) * slopeFieldSize;
+	var y11 = y - Math.sin(ang) * slopeFieldSize;
+	var x12 = x - Math.sin(ang) * smallFieldSize;
+	var y12 = y - Math.cos(ang) * smallFieldSize;
+	var x13 = x - Math.sin(ang) * slopeFieldSize;
+	var y13 = y - Math.cos(ang) * slopeFieldSize;
+	var x14 = x - Math.cos(ang) * smallFieldSize;
+	var y14 = y - Math.sin(ang) * smallFieldSize;
+
+	var x11 = x - Math.cos(perpAng) * slopeFieldSize;
+	var y11 = y - Math.sin(perpAng) * slopeFieldSize;
+	var x12 = x - Math.sin(perpAng) * smallFieldSize;
+	var y12 = y - Math.cos(perpAng) * smallFieldSize;
+	var x13 = x - Math.sin(perpAng) * slopeFieldSize;
+	var y13 = y - Math.cos(perpAng) * slopeFieldSize;
+	var x14 = x - Math.cos(perpAng) * smallFieldSize;
+	var y14 = y - Math.sin(perpAng) * smallFieldSize;
+}
+var trig_end = new Date().getTime();
+var trig_ms = trig_end - trig_start;
+
+$("#work-area").append("Finished " + iterations.toFixed(0) + " tests: arithmetic = " + arit_ms + " ms; trigonometric = " + trig_ms + " ms.<br />");
+}
+
+for (var j = 0; j < 10; j++) {
+	iterate();
+}
+
+});
