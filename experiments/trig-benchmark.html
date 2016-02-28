@@ -22,6 +22,10 @@
 			font-size: 3.052em;
 			color: #f78769;
 		}
+		#results {
+			padding: 1em;
+			background-color: #f0f0ff;
+		}
 	</style>
 	<script type="text/javascript" src="trig-benchmark.js"></script>
 </head>
@@ -30,7 +34,10 @@
 <div class="container">
 	<h1>Slope field<br />JavaScript Trig vs. Arithmetic Benchmarks</h1>
 	<p class="lead">Performance benchmark for trigonometry vs. arithmetic slope management.</p>
-	<div id="work-area"></div>
+	<div id="results">
+		<div id="stats"></div>
+		<div id="browser"></div>
+	</div>
 </div>
 </body>
 </html>

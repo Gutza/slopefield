@@ -4,9 +4,12 @@ $(function() {
 	{
 		var iterations = 1000000;
 		var slopes = [];
+		var init_start = new Date().getTime();
 		for(var i = 0; i<iterations; i++) {
 			slopes.push(Math.random() * Number.MAX_VALUE);
 		}
+		var init_end = new Date().getTime();
+		var init_ms = init_end - init_start;
 
 		var slopeFieldSize = 5;
 		var x = 10;
@@ -88,10 +91,39 @@ $(function() {
 		var trig_ms = trig_end - trig_start;
 
 		$("#work-area").append("Finished " + parseInt(iterations).toLocaleString() + " tests: arithmetic = " + arit_ms + " ms; trigonometric = " + trig_ms + " ms.<br />");
+		
+		var result = {
+			init_ms: init_ms,
+			arit_ms: arit_ms,
+			trig_ms: trig_ms,
+		};
+		
+		return result;
 	}
 
+	var results = [];
 	for (var j = 0; j < 10; j++) {
-		iterate();
+		var result = iterate();
+		results.push(result);
 	}
 
+	var total = {
+		init_ms: 0,
+		arit_ms: 0,
+		trig_ms: 0,
+	};
+	for (var j = 0; j < results.length; j++) {
+		total.init_ms += results[j].init_ms;
+		total.arit_ms += results[j].arit_ms;
+		total.trig_ms += results[j].trig_ms;
+	}
+	
+	var average = {
+		init: total.init_ms / results.length,
+		arit: total.arit_ms / results.length,
+		trig: total.trig_ms / results.length,
+	};
+	
+	$("#stats").text("Init: " + average.init.toFixed(0) + " ms; arithmetic: " + average.arit.toFixed(0) + " ms; trigonometric: " + average.trig.toFixed(0) + " ms");
+	$("#browser").text(navigator.userAgent);
 });
