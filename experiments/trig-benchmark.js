@@ -87,7 +87,7 @@ for (var i = 0; i<iterations; i++) {
 var trig_end = new Date().getTime();
 var trig_ms = trig_end - trig_start;
 
-$("#work-area").append("Finished " + iterations.toFixed(0) + " tests: arithmetic = " + arit_ms + " ms; trigonometric = " + trig_ms + " ms.<br />");
+$("#work-area").append("Finished " + parseInt(iterations).toLocaleString() + " tests: arithmetic = " + arit_ms + " ms; trigonometric = " + trig_ms + " ms.<br />");
 }
 
 for (var j = 0; j < 10; j++) {
