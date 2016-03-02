@@ -59,7 +59,8 @@ function slopeField(p)
 		//This is where you should define the first-order differential equation
 		//Assumes it can be expressed as y' = f(x, y(x))
 		var _slopeAtPoint = function(x, y) {
-			return x/y;
+			return Math.cos(x) * Math.sin(x*y/2);
+			//return x/y;
 			//return Math.cos(x/50 + xFuncOffset/3000) * Math.sin(x*y/94+xFuncOffset/60);
 			//return -(x-xFuncOffset)/y;
 		};
@@ -71,20 +72,17 @@ function slopeField(p)
 		var resetCanvas = function()
 		{
 			//Variables for graph paper
-			var xOffset = p.width / (drawWindow.pMax.x - drawWindow.pMin.x) / 2;
-			var yOffset = p.height / (drawWindow.pMax.y - drawWindow.pMin.y) / 2;
-
-			var xScale = (p.width - 2 * xOffset) / (drawWindow.pMax.x-drawWindow.pMin.x);
+			var xScale = p.width / drawWindow.width();
 			var yScale = xScale;
 
 			//Maps an x coordinate to the appropriate pixeldistance on canvas
 			var xCoordinate = function(x) {
-				return xOffset + (x-drawWindow.pMin.x) * xScale;
+				return (x-drawWindow.pMin.x) * xScale;
 			};
 
 			//Maps a y coordinate to the appropriate pixel distance on canvas
 			var yCoordinate = function (y) {
-				return  p.height-((y-drawWindow.pMin.y)*yScale+ yOffset);
+				return  p.height-((y-drawWindow.pMin.y)*yScale);
 			};
 
 			p.background(58, 66, 74);
@@ -97,8 +95,8 @@ function slopeField(p)
 				p.strokeWeight(1);
 				p.stroke(200);
 			}
-			for (var x = drawWindow.pMin.x; x <= drawWindow.pMax.x + 1; x += slopeFieldSize) {
-				for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y + 1; y += slopeFieldSize) {
+			for (var x = drawWindow.pMin.x; x <= drawWindow.pMax.x; x += slopeFieldSize) {
+				for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y; y += slopeFieldSize) {
 					var slope = slopeAtPoint(x, y);
 					var ang = Math.atan(slope);
 					var angPerp = ang + Math.PI / 2;
