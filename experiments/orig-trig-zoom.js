@@ -59,8 +59,8 @@ function slopeField(p)
 		//This is where you should define the first-order differential equation
 		//Assumes it can be expressed as y' = f(x, y(x))
 		var _slopeAtPoint = function(x, y) {
-			return Math.cos(x) * Math.sin(x*y/2);
-			//return x/y;
+			//return Math.cos(x) * Math.sin(x*y/2);
+			return x*x/y;
 			//return Math.cos(x/50 + xFuncOffset/3000) * Math.sin(x*y/94+xFuncOffset/60);
 			//return -(x-xFuncOffset)/y;
 		};
@@ -127,7 +127,7 @@ function slopeField(p)
 
 			p.fill(255, 0, 0);
 			p.text("["+drawWindow.pMin.x.toFixed(2)+".."+drawWindow.pMax.x.toFixed(2)+", "+drawWindow.pMin.y.toFixed(2)+".."+drawWindow.pMax.y.toFixed(2)+"]", 10, 20);
-			
+
 		};
 
 		resetCanvas();
@@ -150,7 +150,6 @@ canvas.addEventListener("mouseleave", EvLeave, false);
 
 function EvScroll(e)
 {
-	//var e = window.event || e;
 	var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 	e.preventDefault = true;
 	
@@ -160,7 +159,6 @@ function EvScroll(e)
 		return false;
 	}
 	
-	//$(canvas).width($(canvas).width() + delta * 6);
 	if (delta > 0 && drawWindow.pMax.x - drawWindow.pMin.x < 0.001)
 		return false;
 
@@ -176,9 +174,6 @@ function EvScroll(e)
 	drawWindow.pMax.x = midX + newWidth/2;
 	drawWindow.pMax.y = midY + newHeight/2;
 	processingInstance.draw();
-	//canvas.style.width = (canvas.width + delta*2) + "px";
-	//alert(delta);
-	
 	
 	return false; 
 }
