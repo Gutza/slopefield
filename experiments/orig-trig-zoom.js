@@ -37,9 +37,10 @@ var drawWindow = new ViewWindow(
 
 var slopeFieldSize = 0.25;
 
+var slopeDrawEnabled = true;
 var slopeDrawMode = "diamonds";
 var enableEuler = true;
-var eulerStep = 0.1;
+var eulerStep = 0.5;
 
 function slopeField(p)
 {
@@ -89,7 +90,7 @@ function slopeField(p)
 			p.background(58, 66, 74);
 			
 			// Draw slope field
-			if (slopeDrawMode != "none") {
+			if (slopeDrawEnabled) {
 				if (slopeDrawMode == "diamonds") {
 					p.fill(200);
 					p.noStroke();
@@ -213,11 +214,14 @@ var dragStartWindow;
 
 function EvDown(e)
 {
-	enableEuler = false;
 	dragging = true;
 	dragStartMouse = MousePos(e);
 	dragStartWindow = drawWindow.clone();
 	slopeDrawMode = "lines";
+	
+	if (slopeDrawEnabled)
+		enableEuler = false;
+	
 	processingInstance.draw();
 }
 
@@ -266,3 +270,9 @@ function EvLeave(e)
 {
 	$('body').css('overflow', 'auto');
 }
+
+$.key('q', function(){
+  slopeDrawEnabled = !slopeDrawEnabled;
+  processingInstance.draw();
+  return false;
+});
