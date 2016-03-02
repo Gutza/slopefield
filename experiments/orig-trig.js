@@ -34,8 +34,7 @@ function slopeField(p)
 	var xOffset = 20;
 	var yOffset = 20;
 
-	var xScale = (p.width - 2*xOffset) / (xMax-xMin);
-	//var yScale = (p.height - 2*yOffset) / (yMax-yMin);
+	var xScale = (p.width - 2 * xOffset) / (xMax-xMin);
 	var yScale = xScale;
 
 	//Maps an x coordinate to the appropriate pixeldistance on canvas
@@ -58,43 +57,42 @@ function slopeField(p)
 		for (var x = xMin; x <= xMax; x++) {
 			for (var y = yMin; y <= yMax; y++) {
 				var slope = slopeAtPoint(x, y);
-				var endX = x + slopeFieldSize;
-				var endY = y + slopeFieldSize * slope;
-				var distance = p.dist(x, y, endX, endY);
-				var factor = slopeFieldSize/distance/2;
+				var ang = Math.atan(slope);
+				var angPerp = ang + Math.PI / 2;
 				
-				var slope2 = -1 / slope;
-				var endX2 = x + slopeFieldSize;
-				var endY2 = y + slopeFieldSize * slope2;
-				var distance2 = p.dist(x, y, endX2, endY2);
-				var factor2 = slopeFieldSize/distance2/8;
-
-				// This takes the most time (2 ms without, 820 ms with)
+				var asin = Math.sin(ang);
+				var acos = Math.cos(ang);
+				var apsin = Math.sin(angPerp);
+				var apcos = Math.cos(angPerp);
+				
+				var longFact = slopeFieldSize / 2;
+				var shortFact = slopeFieldSize / 8;
+				
 				p.noStroke();
 
-				p.fill(200, 100, 100);
+				p.fill(70, 140, 70);
 				p.quad(
-					xCoordinate(x - slopeFieldSize * factor2),  yCoordinate(y - slopeFieldSize * factor2 * slope),
-					xCoordinate(x - slopeFieldSize * factor), yCoordinate(y - slopeFieldSize * factor * slope2),
-					xCoordinate(x + slopeFieldSize * factor2), yCoordinate(y + slopeFieldSize * factor2 * slope),
-					xCoordinate(x + slopeFieldSize * factor), yCoordinate(y + slopeFieldSize * factor * slope2)
+					xCoordinate(x - apcos * longFact), yCoordinate(y - apsin * longFact),
+					xCoordinate(x - acos * shortFact), yCoordinate(y - asin * shortFact),
+					xCoordinate(x + apcos * longFact), yCoordinate(y + apsin * longFact),
+					xCoordinate(x + acos * shortFact), yCoordinate(y + asin * shortFact)
 				);
 
 				p.fill(255);
 				p.quad(
-					xCoordinate(x - slopeFieldSize * factor),  yCoordinate(y - slopeFieldSize * factor * slope),
-					xCoordinate(x - slopeFieldSize * factor2), yCoordinate(y - slopeFieldSize * factor2 * slope2),
-					xCoordinate(x + slopeFieldSize * factor), yCoordinate(y + slopeFieldSize * factor * slope),
-					xCoordinate(x + slopeFieldSize * factor2), yCoordinate(y + slopeFieldSize * factor2 * slope2)
+					xCoordinate(x - acos * longFact), yCoordinate(y - asin * longFact),
+					xCoordinate(x - apcos * shortFact), yCoordinate(y - apsin * shortFact),
+					xCoordinate(x + acos * longFact), yCoordinate(y + asin * longFact),
+					xCoordinate(x + apcos * shortFact), yCoordinate(y + apsin * shortFact)
 				);
-
+				
 				/*
-				var witnessFact = factor * 1.5;
+				var witnessFact = longFact * 1.5;
 				p.strokeWeight(2);
 				p.stroke(255, 0, 0);
-				p.line(xCoordinate(x), yCoordinate(y), xCoordinate(x + slopeFieldSize * witnessFact), yCoordinate(y + slopeFieldSize * witnessFact * slope));
+				p.line(xCoordinate(x), yCoordinate(y), xCoordinate(x + acos * witnessFact), yCoordinate(y + asin * witnessFact));
 				p.stroke(0, 0, 255);
-				p.line(xCoordinate(x), yCoordinate(y), xCoordinate(x + slopeFieldSize * witnessFact), yCoordinate(y + slopeFieldSize * witnessFact * slope2));
+				p.line(xCoordinate(x), yCoordinate(y), xCoordinate(x + apcos * witnessFact), yCoordinate(y + apsin * witnessFact));
 				*/
 			}
 		}
@@ -121,4 +119,3 @@ function slopeField(p)
 
 var canvas = document.getElementById("canvas");
 var processingInstance = new Processing(canvas, slopeField);
- 
