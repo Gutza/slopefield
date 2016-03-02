@@ -31,11 +31,11 @@ function ViewWindow(pMin, pMax)
 }
 
 var drawWindow = new ViewWindow(
-	new Point(5, 5),
-	new Point(30, 30)
+	new Point(-5, -5),
+	new Point(5, 5)
 );
 
-var slopeFieldSize = 0.5;
+var slopeFieldSize = 0.25;
 
 var drawMode = "diamonds";
 
@@ -59,8 +59,11 @@ function slopeField(p)
 		//This is where you should define the first-order differential equation
 		//Assumes it can be expressed as y' = f(x, y(x))
 		var _slopeAtPoint = function(x, y) {
-			//return Math.cos(x) * Math.sin(x*y/2);
-			return x*x/y;
+			//return -x/y;
+			//return Math.sin(x) * y * y;
+			//return x*x - x - 2;
+			return Math.cos(x) * Math.sin(x*y/2);
+			//return x*x*x/y;
 			//return Math.cos(x/50 + xFuncOffset/3000) * Math.sin(x*y/94+xFuncOffset/60);
 			//return -(x-xFuncOffset)/y;
 		};
