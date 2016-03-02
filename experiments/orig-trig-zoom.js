@@ -38,6 +38,8 @@ var drawWindow = new ViewWindow(
 var slopeFieldSize = 0.25;
 
 var drawMode = "diamonds";
+var enableEuler = true;
+var eulerStep = 0.1;
 
 function slopeField(p)
 {
@@ -47,10 +49,7 @@ function slopeField(p)
 
 		p.size(680, 680);
 		
-		//You'll get a better approximation the smaller the xStep (although it will require more computation)
-		var xStep = 1;
 		var xFuncOffset = 0;
-		var drawGrid = false;
 
 		//Initial conditions
 		var initX = 0;
@@ -72,8 +71,6 @@ function slopeField(p)
 			return _slopeAtPoint(x, y);
 		}
 		
-		var resetCanvas = function()
-		{
 			//Variables for graph paper
 			var xScale = p.width / drawWindow.width();
 			var yScale = xScale;
@@ -88,6 +85,9 @@ function slopeField(p)
 				return  p.height-((y-drawWindow.pMin.y)*yScale);
 			};
 
+
+		var resetCanvas = function()
+		{
 			p.background(58, 66, 74);
 			
 			// Draw slope field
@@ -133,7 +133,31 @@ function slopeField(p)
 
 		};
 
+		function drawEuler()
+		{
+			if (!enableEuler)
+				return;
+			
+			p.strokeWeight(2);
+			p.stroke(210, 0, 0);
+			
+			for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y; y += slopeFieldSize) {
+				var cx = drawWindow.pMin.x;
+				var cy = y;
+				while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
+					var slope = slopeAtPoint(cx, cy);
+					var ang = Math.atan(slope);
+					var nx = cx + eulerStep * Math.cos(ang);
+					var ny = cy + eulerStep * Math.sin(ang);
+					p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(nx), yCoordinate(ny));
+					cx = nx;
+					cy = ny;
+				}
+			}
+		}
+		
 		resetCanvas();
+		drawEuler();
 	}
 }
 
@@ -187,6 +211,7 @@ var dragStartWindow;
 
 function EvDown(e)
 {
+	enableEuler = false;
 	dragging = true;
 	dragStartMouse = MousePos(e);
 	dragStartWindow = drawWindow.clone();
@@ -217,6 +242,7 @@ function EvUp(e)
 {
 	dragging = false;
 	drawMode = "diamonds";
+	enableEuler = true;
 	processingInstance.draw();
 }
 
