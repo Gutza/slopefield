@@ -162,17 +162,17 @@ function EvScroll(e)
 	if (delta > 0 && drawWindow.pMax.x - drawWindow.pMin.x < 0.001)
 		return false;
 
-	var midX = (drawWindow.pMax.x + drawWindow.pMin.x) / 2;
-	var midY = (drawWindow.pMax.y + drawWindow.pMin.y) / 2;
+	var mousePos = MousePos(e);
+	var offXfract = mousePos.x / canvas.width;
+	var offYfract = 1 - mousePos.y / canvas.height;
 	
-	var sizeFactor = 1 - delta/10;
-	var newWidth = drawWindow.width() * sizeFactor;
-	var newHeight = drawWindow.height() * sizeFactor;
+	var sizeFactor = delta/10;
 	
-	drawWindow.pMin.x = midX - newWidth/2;
-	drawWindow.pMin.y = midY - newHeight/2; 
-	drawWindow.pMax.x = midX + newWidth/2;
-	drawWindow.pMax.y = midY + newHeight/2;
+	drawWindow.pMin.x = drawWindow.pMin.x + drawWindow.width() * sizeFactor * offXfract;
+	drawWindow.pMin.y = drawWindow.pMin.y + drawWindow.height() * sizeFactor * offYfract;
+	drawWindow.pMax.x = drawWindow.pMax.x - drawWindow.width() * sizeFactor * (1 - offXfract);
+	drawWindow.pMax.y = drawWindow.pMax.y - drawWindow.height() * sizeFactor * (1 - offYfract);
+	
 	processingInstance.draw();
 	
 	return false; 
