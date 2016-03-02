@@ -37,7 +37,7 @@ var drawWindow = new ViewWindow(
 
 var slopeFieldSize = 0.25;
 
-var drawMode = "diamonds";
+var slopeDrawMode = "diamonds";
 var enableEuler = true;
 var eulerStep = 0.1;
 
@@ -49,8 +49,6 @@ function slopeField(p)
 
 		p.size(680, 680);
 		
-		var xFuncOffset = 0;
-
 		//Initial conditions
 		var initX = 0;
 		var initY = 15;
@@ -61,9 +59,9 @@ function slopeField(p)
 			//return -x/y;
 			//return Math.sin(x) * y * y;
 			//return x*x - x - 2;
-			return Math.cos(x) * Math.sin(x*y/2);
+			//return Math.cos(x) * Math.sin(x*y/2);
 			//return x*x*x/y;
-			//return Math.cos(x/50 + xFuncOffset/3000) * Math.sin(x*y/94+xFuncOffset/60);
+			return Math.cos(x) * Math.sin(x*y/2);
 			//return -(x-xFuncOffset)/y;
 		};
 		
@@ -91,39 +89,41 @@ function slopeField(p)
 			p.background(58, 66, 74);
 			
 			// Draw slope field
-			if (drawMode == "diamonds") {
-				p.fill(200);
-				p.noStroke();
-			} else if (drawMode == "lines") {
-				p.strokeWeight(1);
-				p.stroke(200);
-			}
-			for (var x = drawWindow.pMin.x; x <= drawWindow.pMax.x; x += slopeFieldSize) {
-				for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y; y += slopeFieldSize) {
-					var slope = slopeAtPoint(x, y);
-					var ang = Math.atan(slope);
-					var angPerp = ang + Math.PI / 2;
-					
-					var asin = Math.sin(ang);
-					var acos = Math.cos(ang);
-					var apsin = Math.sin(angPerp);
-					var apcos = Math.cos(angPerp);
-					
-					var longFact = slopeFieldSize / 2;
-					var shortFact = slopeFieldSize / 8;
-					
-					if (drawMode == "diamonds") {
-						p.quad(
-							xCoordinate(x - acos * longFact), yCoordinate(y - asin * longFact),
-							xCoordinate(x - apcos * shortFact), yCoordinate(y - apsin * shortFact),
-							xCoordinate(x + acos * longFact), yCoordinate(y + asin * longFact),
-							xCoordinate(x + apcos * shortFact), yCoordinate(y + apsin * shortFact)
-						);
-					} else if (drawMode == "lines") {
-						p.line(
-							xCoordinate(x - acos * longFact), yCoordinate(y - asin * longFact),
-							xCoordinate(x + acos * longFact), yCoordinate(y + asin * longFact)
-						);
+			if (slopeDrawMode != "none") {
+				if (slopeDrawMode == "diamonds") {
+					p.fill(200);
+					p.noStroke();
+				} else if (slopeDrawMode == "lines") {
+					p.strokeWeight(1);
+					p.stroke(200);
+				}
+				for (var x = drawWindow.pMin.x; x <= drawWindow.pMax.x; x += slopeFieldSize) {
+					for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y; y += slopeFieldSize) {
+						var slope = slopeAtPoint(x, y);
+						var ang = Math.atan(slope);
+						var angPerp = ang + Math.PI / 2;
+						
+						var asin = Math.sin(ang);
+						var acos = Math.cos(ang);
+						var apsin = Math.sin(angPerp);
+						var apcos = Math.cos(angPerp);
+						
+						var longFact = slopeFieldSize / 2;
+						var shortFact = slopeFieldSize / 8;
+						
+						if (slopeDrawMode == "diamonds") {
+							p.quad(
+								xCoordinate(x - acos * longFact), yCoordinate(y - asin * longFact),
+								xCoordinate(x - apcos * shortFact), yCoordinate(y - apsin * shortFact),
+								xCoordinate(x + acos * longFact), yCoordinate(y + asin * longFact),
+								xCoordinate(x + apcos * shortFact), yCoordinate(y + apsin * shortFact)
+							);
+						} else if (slopeDrawMode == "lines") {
+							p.line(
+								xCoordinate(x - acos * longFact), yCoordinate(y - asin * longFact),
+								xCoordinate(x + acos * longFact), yCoordinate(y + asin * longFact)
+							);
+						}
 					}
 				}
 			}
@@ -142,16 +142,18 @@ function slopeField(p)
 			p.stroke(210, 0, 0);
 			
 			for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y; y += slopeFieldSize) {
-				var cx = drawWindow.pMin.x;
-				var cy = y;
-				while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
-					var slope = slopeAtPoint(cx, cy);
-					var ang = Math.atan(slope);
-					var nx = cx + eulerStep * Math.cos(ang);
-					var ny = cy + eulerStep * Math.sin(ang);
-					p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(nx), yCoordinate(ny));
-					cx = nx;
-					cy = ny;
+				for (var direction = 0; direction < 4; direction += Math.PI) {
+					var cx = drawWindow.pMin.x + drawWindow.width() / 2;
+					var cy = y;
+					while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
+						var slope = slopeAtPoint(cx, cy);
+						var ang = Math.atan(slope) + direction;
+						var nx = cx + eulerStep * Math.cos(ang);
+						var ny = cy + eulerStep * Math.sin(ang);
+						p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(nx), yCoordinate(ny));
+						cx = nx;
+						cy = ny;
+					}
 				}
 			}
 		}
@@ -215,7 +217,7 @@ function EvDown(e)
 	dragging = true;
 	dragStartMouse = MousePos(e);
 	dragStartWindow = drawWindow.clone();
-	drawMode = "lines";
+	slopeDrawMode = "lines";
 	processingInstance.draw();
 }
 
@@ -241,7 +243,7 @@ function EvMove(e)
 function EvUp(e)
 {
 	dragging = false;
-	drawMode = "diamonds";
+	slopeDrawMode = "diamonds";
 	enableEuler = true;
 	processingInstance.draw();
 }
