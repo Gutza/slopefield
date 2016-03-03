@@ -40,7 +40,7 @@ var slopeFieldSize = 0.25;
 var slopeDrawEnabled = true;
 var slopeDrawMode = "diamonds";
 var enableEuler = true;
-var eulerStep = 0.5;
+var eulerStep = 0.1;
 
 function slopeField(p)
 {
@@ -221,6 +221,8 @@ function EvDown(e)
 	
 	if (slopeDrawEnabled)
 		enableEuler = false;
+	else
+		eulerStep = 0.5;
 	
 	processingInstance.draw();
 }
@@ -249,6 +251,7 @@ function EvUp(e)
 	dragging = false;
 	slopeDrawMode = "diamonds";
 	enableEuler = true;
+	eulerStep = 0.1;
 	processingInstance.draw();
 }
 
