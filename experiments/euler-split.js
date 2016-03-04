@@ -73,7 +73,7 @@ var drawWindow = new ViewWindow(
 
 var slopeFieldSize = 0.25;
 
-var slopeDrawEnabled = true;
+var quiverDrawEnabled = false;
 var quiverDrawMode = "diamonds";
 
 var eulerStep = new Step("eulerFine", 0.1, "eulerCoarse", 0.5);
@@ -131,7 +131,7 @@ function slopeField(p)
 			p.background(58, 66, 74);
 			
 			// Draw slope field
-			if (slopeDrawEnabled) {
+			if (quiverDrawEnabled) {
 				if (quiverDrawMode == "diamonds") {
 					p.fill(200);
 					p.noStroke();
@@ -256,8 +256,8 @@ canvas.addEventListener("mouseup", EvUp, false);
 canvas.addEventListener("mouseout", EvUp, false);
 canvas.addEventListener("mousemove", EvMove, false);
 canvas.addEventListener("mousedown", EvDown, false);
-canvas.addEventListener("mouseenter", EvEnter, false);
-canvas.addEventListener("mouseleave", EvLeave, false);
+$("#mainContainer").on("mouseenter", EvEnter);
+$("#mainContainer").on("mouseleave", EvLeave);
 
 $(".slider").slider({
 	range: true,
@@ -267,6 +267,8 @@ $(".slider").slider({
 	step: 0.01,
 	slide: stepChange,
 });
+$("#eulerStep").slider("option", "values", [eulerStep.fine, eulerStep.coarse]);
+$("#splitStep").slider("option", "values", [splitStep.fine, splitStep.coarse]);
 
 function stepChange(ev, ui)
 {
@@ -325,7 +327,7 @@ function EvDown(e)
 	dragStartWindow = drawWindow.clone();
 	quiverDrawMode = "lines";
 	
-	if (slopeDrawEnabled)
+	if (quiverDrawEnabled)
 		enableEuler = false;
 	else {
 		eulerStep.setCoarse();
@@ -384,7 +386,7 @@ function EvLeave(e)
 }
 
 $.key('q', function(){
-  slopeDrawEnabled = !slopeDrawEnabled;
+  quiverDrawEnabled = !quiverDrawEnabled;
   processingInstance.draw();
   return false;
 });
