@@ -82,7 +82,6 @@ var enableEuler = true;
 var splitStep = new Step("splitFine", 0.5, "splitCoarse", 1.0);
 var enableSplit = true;
 
-
 function slopeField(p)
 {
 	p.draw = function()
@@ -180,19 +179,26 @@ function slopeField(p)
 			if (!enableEuler)
 				return;
 			
-			p.strokeWeight(1);
-			
 			for (var y = drawWindow.pMin.y; y <= drawWindow.pMax.y; y += slopeFieldSize) {
 				for (var direction = 0; direction < 4; direction += Math.PI) {
 					var cx = drawWindow.pMin.x + drawWindow.width() / 2;
 					var cy = y;
 					
-					if (enableEuler)
-						drawEuler(cx, cy, direction);
+					p.strokeWeight(3);
+					p.stroke(38, 46, 84);
+					drawSplit(cx, cy, 0.1, direction);
+
+					p.strokeWeight(1);
+					if (enableEuler) {
+						p.stroke(210, 0, 0);
+						drawEuler(cx, cy, eulerStep.nominal, direction);
+					}
 					
-					if (enableSplit)
-						drawSplit(cx, cy, direction);
-					
+					if (enableSplit) {
+						p.stroke(0, 210, 0);
+						drawSplit(cx, cy, splitStep.nominal, direction);
+					}
+										
 					p.stroke(210, 210, 210);
 					p.noFill();
 					p.ellipse(xCoordinate(cx), yCoordinate(cy), 5, 5);
@@ -201,39 +207,37 @@ function slopeField(p)
 		}
 		
 
-		function drawEuler(xStart, yStart, direction)
+		function drawEuler(xStart, yStart, step, direction)
 		{
-			p.stroke(210, 0, 0);
 			var cx = xStart;
 			var cy = yStart;
 			while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
 				var slope = slopeAtPoint(cx, cy);
 				var ang = Math.atan(slope) + direction;
-				var nx = cx + eulerStep.nominal * Math.cos(ang);
-				var ny = cy + eulerStep.nominal * Math.sin(ang);
+				var nx = cx + step * Math.cos(ang);
+				var ny = cy + step * Math.sin(ang);
 				p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(nx), yCoordinate(ny));
 				cx = nx;
 				cy = ny;
 			}
 		}
 		
-		function drawSplit(xStart, yStart, direction)
+		function drawSplit(xStart, yStart, step, direction)
 		{
-			p.stroke(0, 210, 0);
 			var cx = xStart;
 			var cy = yStart;
 			while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
 				var slope = slopeAtPoint(cx, cy);
 				var ang = Math.atan(slope) + direction;
-				var nx = cx + splitStep.nominal * Math.cos(ang);
-				var ny = cy + splitStep.nominal * Math.sin(ang);
+				var nx = cx + step * Math.cos(ang);
+				var ny = cy + step * Math.sin(ang);
 				
 				var slope2 = slopeAtPoint(nx, ny);
 				var slopeAvg = (slope + slope2) / 2;
 				
 				finalAng = Math.atan(slopeAvg) + direction;
-				var fx = cx + splitStep.nominal * Math.cos(finalAng);
-				var fy = cy + splitStep.nominal * Math.sin(finalAng);
+				var fx = cx + step * Math.cos(finalAng);
+				var fy = cy + step * Math.sin(finalAng);
 				
 				p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(fx), yCoordinate(fy));
 				cx = fx;
