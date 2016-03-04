@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<title>Euler's Method vs. Split Difference</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" />
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.min.js"></script>
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="https://raw.githubusercontent.com/yckart/jquery.key.js/master/jquery.key.js"></script>
+	<!-- <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'> -->
+	<link href='https://fonts.googleapis.com/css?family=PT+Serif:400|Lobster+Two:400' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<style type="text/css">
+		body {
+			font-family: 'PT Serif', serif;
+		}
+		h1 {
+			font-family: 'Lobster Two', serif;
+			margin-top: 23pt;
+			margin-bottom: 10pt;
+			text-align: center;
+			font-size: 3.052em;
+			color: #f78769;
+		}
+		.key {
+			border-radius: 3px;
+			border: 1px solid black;
+			padding: 3px;
+			font-weight: bold;
+			background-color: #eee;
+		}
+	</style>
+</head>
+
+<body>
+<div class="container">
+		<h1>Euler's Method vs. Split Difference</h1>
+		<p class="lead">Euler's Method vs. my home-brewed "<a href="https://slopefield.wordpress.com/2016/02/26/first-steps/">Split the Difference</a>" method.</p>
+		<p>Euler's Method in red, Split the Difference in green.</p>
+		<div>
+			<div class="col-sm-6">
+				<div class="col-sm-6">Euler step: <span id="eulerFine"></span>/<span id="eulerCoarse"></span></div>
+				<div class="col-sm-6">
+					<div id="eulerStep" class="slider"></div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="col-sm-6">Split step: <span id="splitFine"></span>/<span id="splitCoarse"></span></div>
+				<div class="col-sm-6">
+					<div id="splitStep" class="slider"></div>
+				</div>
+			</div>
+		</div>
+	<canvas id="canvas" style="margin: auto; display: block"></canvas>
+	<p>
+	$$ \frac{dy}{dx} = cos(x) \cdot sin\left(\frac{xy}{2}\right) $$
+	</p>
+	<div>Press <span class='key'>Q</span> to hide/show quivers. Click and drag to pan. Scroll to zoom. Press <span class='key'>Shift</span> + scroll to change slope field resolution and the number of approximations (but not the approximations' precision).</div>
+</div>
+<script type="text/javascript" src="euler-split.js"></script>
+</body>
+</html>
