@@ -71,15 +71,15 @@ var drawWindow = new ViewWindow(
 	new Point(5, 5)
 );
 
-var slopeFieldSize = 0.25;
+var slopeFieldSize = 0.5;
 
 var quiverDrawEnabled = false;
 var quiverDrawMode = "diamonds";
 
-var eulerStep = new Step("eulerFine", 0.1, "eulerCoarse", 0.5);
+var eulerStep = new Step("eulerFine", 0.1, "eulerCoarse", 0.2);
 var enableEuler = true;
 
-var splitStep = new Step("splitFine", 0.4, "splitCoarse", 0.5);
+var splitStep = new Step("splitFine", 0.5, "splitCoarse", 1.0);
 var enableSplit = true;
 
 
@@ -261,7 +261,7 @@ $("#mainContainer").on("mouseleave", EvLeave);
 
 $(".slider").slider({
 	range: true,
-	values: [ 0.1, 0.5 ],
+	values: [ 0, 1 ],
 	min: 0.05,
 	max: 1,
 	step: 0.01,
