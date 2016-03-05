@@ -168,10 +168,6 @@ function slopeField(p)
 					}
 				}
 			}
-
-			p.fill(255, 0, 0);
-			p.text("["+drawWindow.pMin.x.toFixed(2)+".."+drawWindow.pMax.x.toFixed(2)+", "+drawWindow.pMin.y.toFixed(2)+".."+drawWindow.pMax.y.toFixed(2)+"]", 10, 20);
-
 		};
 
 		function drawSolutions()
@@ -204,14 +200,21 @@ function slopeField(p)
 					p.ellipse(xCoordinate(cx), yCoordinate(cy), 5, 5);
 				}
 			}
+			
+			p.fill(155, 155, 155);
+			p.text("["+drawWindow.pMin.x.toFixed(2)+".."+drawWindow.pMax.x.toFixed(2)+", "+drawWindow.pMin.y.toFixed(2)+".."+drawWindow.pMax.y.toFixed(2)+"] / " + slopeFieldSize.toFixed(2), 5, 15);
 		}
 		
+		function inBounds(x, y)
+		{
+			return x >= drawWindow.pMin.x && x <= drawWindow.pMax.x && y >= drawWindow.pMin.y && y <= drawWindow.pMax.y;
+		}
 
 		function drawEuler(xStart, yStart, step, direction)
 		{
 			var cx = xStart;
 			var cy = yStart;
-			while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
+			while (inBounds(cx, cy)) {
 				var slope = slopeAtPoint(cx, cy);
 				var ang = Math.atan(slope) + direction;
 				var nx = cx + step * Math.cos(ang);
@@ -226,22 +229,22 @@ function slopeField(p)
 		{
 			var cx = xStart;
 			var cy = yStart;
-			while (cx >= drawWindow.pMin.x && cx <= drawWindow.pMax.x && cy >= drawWindow.pMin.y && cy <= drawWindow.pMax.y) {
-				var slope = slopeAtPoint(cx, cy);
-				var ang = Math.atan(slope) + direction;
+			while (inBounds(cx, cy)) {
+				var slope1 = slopeAtPoint(cx, cy);
+				var ang = Math.atan(slope1) + direction;
 				var nx = cx + step * Math.cos(ang);
 				var ny = cy + step * Math.sin(ang);
 				
 				var slope2 = slopeAtPoint(nx, ny);
-				var slopeAvg = (slope + slope2) / 2;
+				var slopeAvg = (slope1 + slope2) / 2;
 				
-				finalAng = Math.atan(slopeAvg) + direction;
-				var fx = cx + step * Math.cos(finalAng);
-				var fy = cy + step * Math.sin(finalAng);
+				angAvg = Math.atan(slopeAvg) + direction;
+				var ax = cx + step * Math.cos(angAvg);
+				var ay = cy + step * Math.sin(angAvg);
 				
-				p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(fx), yCoordinate(fy));
-				cx = fx;
-				cy = fy;
+				p.line(xCoordinate(cx), yCoordinate(cy), xCoordinate(ax), yCoordinate(ay));
+				cx = ax;
+				cy = ay;
 			}
 		}
 		
