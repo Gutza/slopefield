@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta charset="UTF-8">
-	<title>Euler's Method vs. Split the Difference</title>
+	<title>Runge-Kutta</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" />
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.min.js"></script>
 	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -41,9 +41,9 @@
 
 <body>
 <div class="container" id="mainContainer">
-		<h1>Euler's Method vs. Split the Difference</h1>
-		<p class="lead">Euler's Method vs. my home-brewed "<a href="https://slopefield.wordpress.com/2016/02/26/first-steps/">Split the Difference</a>" method.</p>
-		<p>Euler's Method in red, Split the Difference in green, best current approximation (Split the Difference) in thick dark blue.</p>
+		<h1>Runge-Kutta</h1>
+		<p class="lead">Euler's Method vs. Heun's method, as generic Runge-Kutta methods described by Butcher tableaus.</p>
+		<p>Euler's Method in red, Heun's method in green; best current approximation (<a href="https://en.wikipedia.org/w/index.php?title=RK4" target="_blank">RK4</a>) in thick dark blue.</p>
 		<p>
 			<strong>Page:</strong> Mouse over the grey background to scroll the page. <kbd>Q</kbd> to show/hide quivers.<br />
 			<strong>Drawing:</strong> Click and drag to pan.
@@ -58,9 +58,9 @@
 				</div>
 			</div>
 			<div class="col-sm-12">
-				<div class="col-sm-6 text-right slider-label">Split: <span id="splitFine"></span>/<span id="splitCoarse"></span></div>
+				<div class="col-sm-6 text-right slider-label">Heun: <span id="heunFine"></span>/<span id="heunCoarse"></span></div>
 				<div class="col-sm-6">
-					<div id="splitStep" class="slider"></div>
+					<div id="heunStep" class="slider"></div>
 				</div>
 			</div>
 		</div>
@@ -69,6 +69,6 @@
 	$$ \frac{dy}{dx} = cos(x) \cdot sin\left(\frac{xy}{2}\right) $$
 	</p>
 </div>
-<script type="text/javascript" src="euler-split.js"></script>
+<script type="text/javascript" src="Runge-Kutta.js"></script>
 </body>
 </html>
